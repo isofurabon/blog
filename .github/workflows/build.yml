@@ -29,7 +29,7 @@ jobs:
 
       # retrive all posts and generate posts for Hugo
       - name: Retrive and generate posts
-        uses: shell
+        shell: bash
         run: python3 ./scripts/retrive_and_generate_posts.py
         env:
           ENDPOINT: ${{secrets.ENDPOINT}}
@@ -37,7 +37,7 @@ jobs:
           OUTPUT: ./content/posts
 
       - name: Build
-        uses: shell
+        shell: bash
         run: hugo
 
       # Save artifacts
