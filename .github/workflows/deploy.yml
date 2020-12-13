@@ -18,7 +18,7 @@ jobs:
 
       # run build docker
       - name: Build
-        uses: ./build/actions/build-and-deploy
+        uses: /build/actions/build-and-deploy
         env:
           ENDPOINT: ${{secrets.ENDPOINT}}
           X_API_KEY: ${{secrets.X_API_KEY}}
