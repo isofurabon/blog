@@ -19,11 +19,9 @@ def openRequest(request):
 def getPublishedPosts(ENDPOINT, X_API_KEY, offset, limit):
     req = createRequestForPublishedPosts(ENDPOINT, X_API_KEY, offset, limit)
     body = openRequest(req)
-    print(body)
     return json.loads(body)
 
 def getDraftPost(ENDPOINT, X_API_KEY, contentId, draftKey):
     req = createRequestForDraftPost(ENDPOINT, X_API_KEY, contentId, draftKey)
     body = openRequest(req)
-    print(body)
     return json.loads(body)
