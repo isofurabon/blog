@@ -14,6 +14,9 @@ CODE_START_TAG = "<pre><code>"
 CODE_END_TAG = "</code></pre>"
 CODE_TAG_EXP = re.compile(CODE_START_TAG+'.*?'+CODE_END_TAG+'|'+ONE_LINE_CODE_START_TAG+'.*?'+ONE_LINE_CODE_END_TAG, re.DOTALL)
 
+OUTPUT_PARENT_DIR = Path(os.environ['OUTPUT'])
+OUTPUT_PARENT_DIR.mkdir(parents=True, exist_ok=True)
+
 def createRequest(ENDPOINT, X_API_KEY, offset, limit):
     req = urllib.request.Request(f'{ENDPOINT}?offset={offset}&limit={limit}')
     req.add_header('X-API-KEY', X_API_KEY)
@@ -65,9 +68,8 @@ def main():
 
             
             # create file
-            filepath = Path(os.environ['OUTPUT']+f'/{postSlug}.md')
+            filepath = OUTPUT_PARENT_DIR / f'{postSlug}.md'
             print(f'{filepath} ...\t', end="")
-
             with open(filepath, 'w') as file:
                 file.write('---\n'\
                         'author: "isofurabon"\n' \
