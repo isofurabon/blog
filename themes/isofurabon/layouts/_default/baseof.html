@@ -7,7 +7,7 @@
     {{- $style := resources.Get "sass/main.scss" | toCSS | minify | fingerprint -}}
     <link rel="stylesheet" href="{{ $style.Permalink | relURL }}"/>
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Noto+Sans+JP&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Noto+Sans+JP&display=swap" media="print" onload="this.media='all'">
     <title>
         {{- block "title" . -}}
             {{- .Title -}}
