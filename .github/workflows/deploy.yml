@@ -19,8 +19,7 @@ jobs:
       # run build docker
       - name: Build
         uses: ./build/actions/build-and-deploy
-        with:
-          env:
-            ENDPOINT: ${{secrets.ENDPOINT}}
-            X_API_KEY: ${{secrets.X_API_KEY}}
-            OUTPUT: /content/posts
+        env:
+          ENDPOINT: ${{secrets.ENDPOINT}}
+          X_API_KEY: ${{secrets.X_API_KEY}}
+          OUTPUT: /content/posts
