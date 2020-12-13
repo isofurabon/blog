@@ -1,5 +1,5 @@
-# コードを実行するコンテナイメージ
-FROM alpine:3.10
+FROM klakegg/hugo:0.79.0-ext-alpine
+RUN apk add --no-cache python3
 
 # アクションのリポジトリからコードファイルをファイルシステムパスへコピー
 # `/` of the container
