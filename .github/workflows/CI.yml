@@ -51,7 +51,7 @@ jobs:
 
   build-deploy:
     runs-on: ubuntu-latest
-    name: Get all posts and build sites, then upload under '/public' and deploy
+    name: Build & Deploy
     if: ${{ !contains(github.event.client_payload, 'draftKey') }}
     steps:
       - name: Checkout
