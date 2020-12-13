@@ -10,16 +10,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: A job to build site with Hugo on docker
+    name: Retrive all posts and build sites, then upload under '/public'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Setup Hugo
-        uses: klakegg/actions-hugo@1.0.0
-        with:
-          version: 0.79.0
-          image: ext-alpine
 
       - name: Setup Python 3.x
         uses: actions/setup-python@v2
@@ -36,12 +30,14 @@ jobs:
           X_API_KEY: ${{secrets.X_API_KEY}}
           OUTPUT: ./content/posts
 
-      - name: Build
-        shell: bash
-        run: hugo
+      - name: Build with Hugo
+        uses: klakegg/actions-hugo@1.0.0
+        with:
+          version: 0.79.0
+          image: ext-alpine
 
       # Save artifacts
-      - name: 'Upload Artifact'
+      - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           path: ./public
