@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Retrive all posts and build sites, then upload under '/public'
+    name: Retrive all posts and build sites, then upload under '/public' and deploy
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -44,16 +44,16 @@ jobs:
           path: ./public
           retention-days: 1
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    name: Download artifacts, then deploy under '/public' to Netlify
-    steps:
+  # deploy:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   name: Download artifacts, then deploy under '/public' to Netlify
+  #   steps:
 
-      - name: Download artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: public
+  #     - name: Download artifacts
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: public
 
       # deploy artifactto netlify
       - name: 'Deploy to Netlify'
