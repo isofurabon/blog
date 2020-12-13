@@ -1,0 +1,48 @@
+# This is a basic workflow to help you get started with Actions
+name: Build on Docker
+
+# Controls when the action will run. 
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: A job to build site with Hugo on docker
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Hugo
+        uses: klakegg/actions-hugo@1.0.0
+        with:
+          version: 0.79.0
+          image: ext-alpine
+
+      - name: Setup Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+
+      # retrive all posts and generate posts for Hugo
+      - name: Retrive and generate posts
+        uses: shell
+        run: python3 ./scripts/retrive_and_generate_posts.py
+        env:
+          ENDPOINT: ${{secrets.ENDPOINT}}
+          X_API_KEY: ${{secrets.X_API_KEY}}
+          OUTPUT: ./content/posts
+
+      - name: Build
+        uses: shell
+        run: hugo
+
+      # Save artifacts
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          path: ./public
+          retention-days: 1

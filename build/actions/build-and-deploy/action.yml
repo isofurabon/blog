@@ -1,6 +1,0 @@
-# action.yml
-name: 'Build & Deploy'
-description: 'Build Hugo and Deploy artifacts to Netlify (WIP)'
-runs:
-  using: 'docker'
-  image: 'Dockerfile'
