@@ -57,6 +57,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: test
+        shell: bash
+        run: echo ${{ github.event.client_payload }}
+
       - name: Setup Python 3.x
         uses: actions/setup-python@v2
         with:
