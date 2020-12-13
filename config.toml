@@ -3,6 +3,9 @@ languageCode = "ja"
 title = "いそふらめも"
 theme = "isofurabon"
 
+# URLを相対表記に
+relativeURLs = true
+
 #トップページ一覧にでる記事数
 paginate = 5 
 
