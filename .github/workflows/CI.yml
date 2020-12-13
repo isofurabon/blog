@@ -1,0 +1,89 @@
+name: CI
+
+# Controls when the action will run. 
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+  repository_dispatch:
+      types: [create-new-post]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build-draft:
+    runs-on: ubuntu-latest
+    name: Build Draft only
+    if: ${{ contains(github.event.client_payload, 'draftKey') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+
+      # get all posts and generate posts for Hugo
+      - name: Get and generate posts
+        shell: bash
+        run: python3 ./scripts/create_draft_post.py
+        env:
+          ENDPOINT: ${{secrets.ENDPOINT}}
+          X_API_KEY: ${{secrets.X_API_KEY}}
+          CONTENTID: ${{github.event.client_payload.id}}
+          DRAFTKEY: ${{github.event.client_payload.draftKey}}
+          OUTPUT: ./content/posts
+
+      - name: Build with Hugo
+        uses: klakegg/actions-hugo@1.0.0
+        with:
+          version: 0.79.0
+          image: ext-alpine
+
+      # Save artifacts
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: public
+          path: ./public
+          retention-days: 1 
+
+  build-deploy:
+    runs-on: ubuntu-latest
+    name: Get all posts and build sites, then upload under '/public' and deploy
+    if: ${{ !contains(github.event.client_payload, 'draftKey') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+
+      # get all posts and generate posts for Hugo
+      - name: Get and generate posts
+        shell: bash
+        run: python3 ./scripts/create_published_posts.py
+        env:
+          ENDPOINT: ${{secrets.ENDPOINT}}
+          X_API_KEY: ${{secrets.X_API_KEY}}
+          OUTPUT: ./content/posts
+
+      - name: Build with Hugo
+        uses: klakegg/actions-hugo@1.0.0
+        with:
+          version: 0.79.0
+          image: ext-alpine
+
+      # deploy artifactto netlify (if not draft)
+      - name: 'Deploy to Netlify'
+        uses: jsmrcaga/action-netlify-deploy@v1.2.0
+        with:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_DEPLOY_MESSAGE: "Prod deploy (published ${{ github.event.client_payload.id }})"
+          NETLIFY_DEPLOY_TO_PROD: true
+          build_directory: 'public'
