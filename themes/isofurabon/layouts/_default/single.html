@@ -1,0 +1,39 @@
+{{/*  記事詳細ページでは，タブに表示されるサイト名を記事名-サイト名の形式にする  */}}
+{{- define "title" -}}
+    {{ .Title }} &ndash; {{ .Site.Title }}
+{{- end -}}
+
+{{- define "main" -}}
+<article>
+    {{/*  タイトル  */}}
+    <h2>{{- .Title -}}</h2>
+    {{/*  投稿日時  */}}
+    <p class="date">{{- .Date.Format "2006-01-02" -}}</p>
+    {{/*  タグ  */}}
+    {{- range (.GetTerms "tags") -}}
+    <a class="tag" href="{{ .RelPermalink }}">#{{- .LinkTitle -}}</a>
+    {{- end -}}
+    {{/*  中身  */}}
+    {{- .Content -}}
+</article>
+    {{/*  関連するコンテンツのリンク表示  */}}
+    {{- $related := .Site.RegularPages.Related . | first .Site.Params.maxRelatedArticles -}}
+    {{- with $related -}}
+        <h3 class="related-article-title">関連する記事</h3>
+        <ul>
+            {{- range . -}}
+            <li><a href="{{ .RelPermalink }}">{{- .Title -}}</a></li>
+            {{- end -}}
+        </ul>
+    {{- end -}}
+
+    {{/*  前後の記事用リンク  */}}
+<footer>
+    {{- with .Next -}}
+        <a class="paging-nav" href="{{.RelPermalink}}">&lt; {{ .Title -}}</a>
+    {{- end -}}
+    {{- with .Prev -}}
+        <a class="paging-nav" href="{{.RelPermalink}}">{{- .Title }} &gt;</a>
+    {{- end -}}
+</footer>
+{{- end -}}

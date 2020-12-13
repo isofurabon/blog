@@ -1,0 +1,9 @@
+{{/*  キーがタブに表示されるようにする(ただし，このコンテキストでのキーがタイトルと異なれば.(index.htmlでは同じ))..)  */}}
+{{- define "title" -}}
+{{- if eq .Title .Site.Title -}}
+    {{- .Title -}}
+{{- end -}}
+{{- if ne .Title .Site.Title -}}
+    {{ .Title }} &ndash; {{ .Site.Title }}
+{{- end -}}
+{{- end -}}

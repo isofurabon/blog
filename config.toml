@@ -1,0 +1,63 @@
+baseURL = "https://isofurabon.github.io/"
+languageCode = "ja"
+title = "いそふらめも"
+theme = "isofurabon"
+
+#トップページ一覧にでる記事数
+paginate = 5 
+
+# 一応以下のparam設定してるけど，もしかしたらあんまり意味をなしていない(今のテンプレートだと，上の設定だけで十分かも)
+hasCJKLanguage = true
+summaryLength = 40
+
+# /postsをなくして，それ以外はちゃんとあるようにする
+disableKinds = ["section", "RSS", "sitemap", "taxonomy"]
+ignoreErrors = ["error-disable-taxonomy"]
+
+# change permalinks for page
+[permalinks]
+  posts = "/:year/:month/:day/:title/"
+
+# 関連するコンテンツ表示用
+[related]
+  includeNewer = true
+  threshold = 80
+  toLower = true
+
+  [[related.indices]]
+    name = "keywords"
+    weight = 100
+
+  [[related.indices]]
+    name = "tags"
+    weight = 100
+
+  [[related.indices]]
+    name = "date"
+    weight = 10
+
+# この[params]以下に設定すると，.Site.Params.hogehoge で値を参照できるようになる
+[params]
+# 関連する記事の表示数
+  maxRelatedArticles = 5
+  maxSummaryLength = 40
+
+
+# シンタックスハイライト設定．noClasses = false にすると，cssでの設定が効くようになる
+[markup]
+  [markup.highlight]
+    anchorLineNos = false
+    codeFences = true
+    guessSyntax = false
+    hl_Lines = ""
+    lineAnchors = ""
+    lineNoStart = 1
+    lineNos = true
+    lineNumbersInTable = true
+    noClasses = true
+    style = "dracula"
+    tabWidth = 4
+
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

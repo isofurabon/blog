@@ -1,0 +1,5 @@
+{
+    "name": "isofurabon-Blog",
+    "dockerFile": "Dockerfile",
+    "extensions": ["bungcip.better-toml", "budparr.language-hugo-vscode", "ms-python.python"]
+}

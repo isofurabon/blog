@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta lang="jp">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{- $style := resources.Get "sass/main.scss" | toCSS | minify | fingerprint -}}
+    <link rel="stylesheet" href="{{ $style.Permalink | relURL }}"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Noto+Sans+JP&display=swap" rel="stylesheet">
+    <title>
+        {{- block "title" . -}}
+            {{- .Title -}}
+        {{- end -}}
+    </title>
+</head>
+<body>
+    <header>
+        <h1 class="site-title"><a class="site-title-link"href="/">{{ .Site.Title }}</a></h1>
+    </header>
+    <main>
+        {{- block "main" . -}}
+            {{/* 記事とそのサマリーを一覧で出す */}}
+            {{ .Content }}
+            {{- if ne .Title .Site.Title -}}
+                <h2 class="tag-page-header"><a href="{{ .RelPermalink }}">#{{- .Title -}}</a> 関連一覧</h2>
+            {{- end -}}
+            {{- range .Paginator.Pages -}}
+                <article>
+                    <h2><a class="post-title" href="{{ .RelPermalink }}">{{- .Title -}}</a></h2>
+                    <p class="date">{{- .Date.Format "2006-01-02" -}}</p>
+                    {{/*  タグ  */}}
+                    {{- range (.GetTerms "tags") -}}
+                        <a class="tag" href="{{ .RelPermalink }}">#{{- .LinkTitle -}}</a>
+                    {{- end -}}
+                    <p>
+                        {{- .Content | safeHTML | truncate .Site.Params.maxSummaryLength -}}
+                    </p>
+                    {{- if ge (len (.Content | safeHTML )) .Site.Params.maxSummaryLength -}}
+                        <a href="{{ .RelPermalink }}">続きを読む</a>
+                    {{- end -}}
+                </article>
+            {{- end -}}
+            <footer>
+                {{/*  前ページがあればリンク表示する  */}}
+                {{- with .Paginator.Prev -}}
+                    <a class="paging-nav" href="{{ .URL }}">&lt; 新しい記事</a>
+                {{- end -}}
+                {{/*  次ページがあればリンク表示する  */}}
+                {{- with .Paginator.Next -}}
+                    <a class="paging-nav" href="{{ .URL }}">古い記事 &gt;</a>
+                {{- end -}}
+            </footer>
+        {{- end -}}
+    </main>
+</body>
+</html>
