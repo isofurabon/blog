@@ -80,6 +80,17 @@ jobs:
 
       # deploy artifactto netlify (if not draft)
       - name: 'Deploy to Netlify'
+        if: ${{ contains(github.event.client_payload, 'id') }}
+        uses: jsmrcaga/action-netlify-deploy@v1.2.0
+        with:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_DEPLOY_MESSAGE: "Prod deploy (published ${{ github.event.client_payload.id }})"
+          NETLIFY_DEPLOY_TO_PROD: true
+          build_directory: 'public'
+
+      - name: 'Deploy to Netlify (manual)'
+        if: ${{ !contains(github.event.client_payload, 'id') }}
         uses: jsmrcaga/action-netlify-deploy@v1.2.0
         with:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
