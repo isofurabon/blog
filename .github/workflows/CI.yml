@@ -13,7 +13,7 @@ jobs:
   build-draft:
     runs-on: ubuntu-latest
     name: Build Draft only
-    if: ${{ contains(github.event.client_payload, 'draftKey') }}
+    if: ${{ github.event.client_payload.draftKey }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -52,14 +52,10 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
     name: Build & Deploy
-    if: ${{ !contains(github.event.client_payload, 'draftKey') }}
+    if: ${{ !github.event.client_payload.draftKey }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: test
-        shell: bash
-        run: echo ${{ github.event.client_payload.draftKey }}
 
       - name: Setup Python 3.x
         uses: actions/setup-python@v2
@@ -84,7 +80,7 @@ jobs:
 
       # deploy artifactto netlify (if not draft)
       - name: 'Deploy to Netlify'
-        if: ${{ contains(github.event.client_payload, 'id') }}
+        if: ${{ github.event.client_payload.id }}
         uses: jsmrcaga/action-netlify-deploy@v1.2.0
         with:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -94,7 +90,7 @@ jobs:
           build_directory: 'public'
 
       - name: 'Deploy to Netlify (manual)'
-        if: ${{ !contains(github.event.client_payload, 'id') }}
+        if: ${{ !github.event.client_payload.id }}
         uses: jsmrcaga/action-netlify-deploy@v1.2.0
         with:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
