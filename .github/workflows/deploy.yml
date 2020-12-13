@@ -20,8 +20,7 @@ jobs:
       - name: Build
         uses: ./build/actions/build-and-deploy
         with:
-          who-to-greet: 'Mona the Octocat'
-      
-      # get output
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+          env:
+            ENDPOINT: ${{secrets.ENDPOINT}}
+            X_API_KEY: ${{secrets.X_API_KEY}}
+            OUTPUT: /content/posts
