@@ -1,4 +1,4 @@
-name: CI
+name: Build & Deploy
 
 # Controls when the action will run. 
 on:
