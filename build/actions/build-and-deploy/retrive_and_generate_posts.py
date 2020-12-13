@@ -4,11 +4,8 @@ import html
 import urllib.request
 import json
 import re
+import argparse
 from pathlib import Path
-
-POSTS_ROOT_DIR = "content/posts"
-POSTS_ENDPOINT = ""
-X_API_KEY = ""
 
 # regex for retrive code tags
 ONE_LINE_CODE_START_TAG = "<code>"
@@ -17,8 +14,8 @@ CODE_START_TAG = "<pre><code>"
 CODE_END_TAG = "</code></pre>"
 CODE_TAG_EXP = re.compile(CODE_START_TAG+'.*?'+CODE_END_TAG+'|'+ONE_LINE_CODE_START_TAG+'.*?'+ONE_LINE_CODE_END_TAG, re.DOTALL)
 
-def createRequest(offset, limit):
-    req = urllib.request.Request(f'{POSTS_ENDPOINT}?offset={offset}&limit={limit}')
+def createRequest(ENDPOINT, X_API_KEY, offset, limit):
+    req = urllib.request.Request(f'{ENDPOINT}?offset={offset}&limit={limit}')
     req.add_header('X-API-KEY', X_API_KEY)
     return req
 
@@ -27,16 +24,16 @@ def callAPI(request):
         body = res.read().decode('utf-8')
     return body
 
-def getJSONData(offset, limit):
-    req = createRequest(offset, limit)
+def getJSONData(ENDPOINT, X_API_KEY, offset, limit):
+    req = createRequest(ENDPOINT, X_API_KEY, offset, limit)
     body = callAPI(req)
     return json.loads(body)
 
-def main():
+def main(args):
     offset = 0
     limit = 10
     while True:
-        jsonFile = getJSONData(offset, limit)
+        jsonFile = getJSONData(args.ENDPOINT, args.X_API_KEY, offset, limit)
 
         # parameters about retrived contetns
         totalCount = jsonFile['totalCount']
@@ -68,7 +65,7 @@ def main():
 
             
             # create file
-            filepath = Path(f'{POSTS_ROOT_DIR}/{postSlug}.md')
+            filepath = Path(f'{args.OUTPUT_DIR}/{postSlug}.md')
             print(f'{filepath} ...\t', end="")
 
             with open(filepath, 'w') as file:
@@ -89,4 +86,8 @@ def main():
         offset += limit
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description='Retrive & generate posts')
+    parser.add_argument('ENDPOINT', type=str)
+    parser.add_argument('X_API_KEY', type=str)
+    parser.add_argument('OUTPUT_DIR', type=str)
+    main(parser.parse_args())
