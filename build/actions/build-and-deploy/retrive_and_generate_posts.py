@@ -4,7 +4,7 @@ import html
 import urllib.request
 import json
 import re
-import argparse
+import os
 from pathlib import Path
 
 # regex for retrive code tags
@@ -29,11 +29,11 @@ def getJSONData(ENDPOINT, X_API_KEY, offset, limit):
     body = callAPI(req)
     return json.loads(body)
 
-def main(args):
+def main():
     offset = 0
     limit = 10
     while True:
-        jsonFile = getJSONData(args.ENDPOINT, args.X_API_KEY, offset, limit)
+        jsonFile = getJSONData(os.environ['ENDPOINT'], os.environ['X_API_KEY'], offset, limit)
 
         # parameters about retrived contetns
         totalCount = jsonFile['totalCount']
@@ -65,7 +65,7 @@ def main(args):
 
             
             # create file
-            filepath = Path(f'{args.OUTPUT_DIR}/{postSlug}.md')
+            filepath = Path(os.environ['OUTPUT']+f'/{postSlug}.md')
             print(f'{filepath} ...\t', end="")
 
             with open(filepath, 'w') as file:
@@ -86,8 +86,4 @@ def main(args):
         offset += limit
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Retrive & generate posts')
-    parser.add_argument('ENDPOINT', type=str)
-    parser.add_argument('X_API_KEY', type=str)
-    parser.add_argument('OUTPUT_DIR', type=str)
-    main(parser.parse_args())
+    main()
