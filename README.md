@@ -1,2 +1,2 @@
-# WIP 
-Workspace for my static blog site that is made by Hugo.
+# Blog template for hugo
+https://memo.isofurabon.dev/2021/01/04/hugo-microcms-netlify/
