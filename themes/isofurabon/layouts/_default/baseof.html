@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta lang="jp">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{- block "meta" . -}}
+    {{- end -}}
     {{- $style := resources.Get "sass/main.scss" | toCSS | minify | fingerprint -}}
     <link rel="stylesheet" href="{{ $style.Permalink | relURL }}"/>
     <link rel="preconnect" href="https://fonts.gstatic.com">
