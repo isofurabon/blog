@@ -29,7 +29,7 @@
             {{- end -}}
             {{- range .Paginator.Pages -}}
                 <article>
-                    <h2><a class="post-title" href="{{ .RelPermalink }}">{{- .Title -}}</a></h2>
+                    <h2 class="post-title"><a class="post-title-link" href="{{ .RelPermalink }}">{{- .Title -}}</a></h2>
                     <p class="date">{{- .Date.Format "2006-01-02" -}}</p>
                     {{/*  タグ  */}}
                     {{- range (.GetTerms "tags") -}}
