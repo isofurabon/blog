@@ -34,6 +34,7 @@ def convertToMarkdown(content):
     markdown =  '---\n'\
         'author: "isofurabon"\n' \
         f'title: "{content["title"]}"\n' \
+        f'slug: "{content["slug"]}"\n' \
         f'date: {content["date"]}\n' \
         f'tags: {getTags(content)}\n' \
         '---\n' \
