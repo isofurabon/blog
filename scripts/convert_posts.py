@@ -30,12 +30,25 @@ def convertCodeTags(content):
     return content
 
 
+# If images exists in content, use it.
+# If not, setup a blank list and use it.
+def setupImages(content):
+    if not "images" in content:
+        content["images"] = [];
+    else:
+        content["images"] = [content["images"]["url"]];
+
+
 def convertToMarkdown(content):
+    # setup images for ogp
+    setupImages(content)
+
     markdown =  '---\n'\
         'author: "isofurabon"\n' \
         f'title: "{content["title"]}"\n' \
         f'slug: "{content["slug"]}"\n' \
         f'date: {content["date"]}\n' \
+        f'images: {content["images"]}\n' \
         f'tags: {getTags(content)}\n' \
         '---\n' \
         f'{convertCodeTags(content)["body"]}'
