@@ -24,11 +24,11 @@
             {{/* 記事とそのサマリーを一覧で出す */}}
             {{ .Content }}
             {{- if ne .Title .Site.Title -}}
-                <h1 class="tag-page-header"><a href="{{ .RelPermalink }}">#{{- .Title -}}</a> 関連一覧</h1>
+                <h2 class="tag-page-header"><a href="{{ .RelPermalink }}">#{{- .Title -}}</a> 関連一覧</h2>
             {{- end -}}
             {{- range .Paginator.Pages -}}
                 <article>
-                    <h1 class="post-title"><a class="post-title-link" href="{{ .RelPermalink }}">{{- .Title -}}</a></h1>
+                    <h2 class="post-title"><a class="post-title-link" href="{{ .RelPermalink }}">{{- .Title -}}</a></h2>
                     <p class="date">{{- .Date.Format "2006-01-02" -}}</p>
                     {{/*  タグ  */}}
                     {{- range (.GetTerms "tags") -}}
